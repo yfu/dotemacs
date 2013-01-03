@@ -1,0 +1,28 @@
+;; Object fuyu/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "fuyu/"
+  :tables (list 
+   (semanticdb-table "test.py"
+    :major-mode 'python-mode
+    :tags 
+        '( ("Test" type
+               (:members 
+                  ( ("foo1" function (:arguments 
+                      ( ("self" variable nil (reparse-symbol function_parameters) [28 32]))                      ) (reparse-symbol indented_block_body) [19 56])
+                    ("foo2" function (:arguments 
+                      ( ("self" variable nil (reparse-symbol function_parameters) [74 78]))                      ) (reparse-symbol indented_block_body) [65 102]))                  
+                :type "class")
+                nil [1 102])
+            ("print" code nil nil [102 114])
+            ("print" code nil nil [115 124]))          
+    :file "test.py"
+    :pointmax 141
+    :fsize 141
+    :lastmodtime '(20275 24819)
+    :unmatched-syntax '((IMPORT 126 . 132) ($EOI 141 . 141))
+    )
+   )
+  :file "!Users!fuyu!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )
