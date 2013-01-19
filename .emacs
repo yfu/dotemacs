@@ -4,20 +4,36 @@
 ;;Hide the toolbar
 (tool-bar-mode -1)
 
+;;Key binding
+(setq mac-command-modifier 'super) ; sets the Command key as Super
+;; (global-set-key "\M-;" 'comment-or-uncomment-region-or-line)
+(global-set-key (kbd "s-;") 'comment-or-uncomment-region-or-line)
+;;Auto completion using hippe-expand
+(global-set-key "\M- " 'hippie-expand)
+;; TODO
+;;Bind the compile-dwim-run to s-r
+
+;; Set the PATH variable for emacs because emacs inherits this value
+;; from its parent process, maybe "launchd" process.
+(setenv "PATH" "/Users/yfu/perl5/perlbrew/bin:/Users/yfu/perl5/perlbrew/perls/perl-5.16.2/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/usr/local/git/bin:/usr/texbin:/Users/yfu/Dropbox/Courses/Rotation/bin:/Users/yfu/.rvm/bin")
+
 ;; =============== add load path ====================>
 (add-to-list 'load-path "~/.emacs.d/")
 
-;(add-to-list 'load-path "~/.emacs.d/color-theme/")
-;custom-theme-load-path(add-to-list 'load-path "~/.emacs.d/color-theme/themes/")
-
-;;Customize-theme
-;(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-
 ;;Use solarized theme
 (add-to-list 'custom-theme-load-path "~/.emacs.d/emacs-color-theme-solarized")
-(load-theme 'solarized-light t)
+(if window-system
+    (load-theme 'solarized-light t)
+  (load-theme 'solarized-dark nil) ;; Do NOT load any theme in terminal
+)
 
-(add-to-list 'default-frame-alist '(font . "Monaco-14"))
+(setq default-frame-alist
+      '((top . 200) (left . 400)
+        (width . 80) (height . 40)
+        (font . "Monaco-15")))
+;(add-to-list 'default-frame-alist '(font . "Monaco-14"))
+;(add-to-list 'default-frame-alist '(top . 200) (left . 400)
+;                                    (width . 80) (height . 40))
 
 ;;For markdown mode
 (autoload 'markdown-mode "markdown-mode.el"
@@ -26,18 +42,16 @@
 (setq auto-mode-alist
       (cons '("\\.text" . markdown-mode) auto-mode-alist))
 
-
 ;yasnippet
 (add-to-list 'load-path "~/.emacs.d/plugins/yasnippet")
 (require 'yasnippet) ;; not yasnippet-bundle
-(yas/global-mode 1)
+(yas-global-mode 1)
 
 (put 'narrow-to-region 'disabled nil)
 
 ;;R
 (add-to-list 'load-path "~/.emacs.d/ess/lisp")
 (require 'ess-site)
-
 ; automatically get the correct mode 
 auto-mode-alist (append (list '("\\.R$" . R-mode)
 			      '("\\.r$" . R-mode)
@@ -47,15 +61,13 @@ auto-mode-alist (append (list '("\\.R$" . R-mode)
 ;;For perl (PDE)
 (add-to-list 'load-path "~/.emacs.d/pde/lisp")
 (load "pde-load")
-
+;; Add key bindings for PDE
+;; I prefer to use command + R as the shortcut for running this script
+(eval-after-load 'pde
+  '(define-key pde-cperl-map (kbd "s-r") 'compile-dwim-run))
 
 ;;Turn off the annoying beep in emacs
 (setq visible-bell t)
-
-;; Set the font
-;; Font is set earlier in this file
-; (set-default-font "Menlo Regular-14")  
-; (set-default-font "Monaco Regular-14")
 
 ;;Comment or uncomment currrent line no matter it is highlighted or not
 (defun comment-or-uncomment-region-or-line ()
@@ -66,8 +78,6 @@ auto-mode-alist (append (list '("\\.R$" . R-mode)
             (setq beg (region-beginning) end (region-end))
             (setq beg (line-beginning-position) end (line-end-position)))
         (comment-or-uncomment-region beg end)))
-;;Key binding
-(global-set-key "\M-;" 'comment-or-uncomment-region-or-line)
 
 
 ;;line number
@@ -82,13 +92,6 @@ auto-mode-alist (append (list '("\\.R$" . R-mode)
 ;(setq todo-file-do "~/todo/do") 
 ;(setq todo-file-done "~/todo/done") 
 ;(setq todo-file-top "~/todo/top") 
-
-;color-theme
-;(require 'color-theme)
-;(color-theme-initialize)
-;(color-theme-classic)
-;(load-file "~/.emacs.d/themes/color-theme-cobalt.el")
-;(color-theme-bharadwaj-slate)
 
 ;;Change comint keys
 ;(require 'comint)
@@ -124,36 +127,3 @@ auto-mode-alist (append (list '("\\.R$" . R-mode)
 ;; path to the python interpreter, e.g.: ~rw/python27/bin/python2.7
 ;(setq py-python-command "python")
 ;(autoload 'python-mode "python-mode" "Python editing mode." t)
-
-
-
-
-
-;; Pretty colors
-;(set-background-color "black")
-;(set-foreground-color "green")
-;(set-cursor-color "green")
-
-;(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
-; '(tool-bar-mode nil))
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(background-color "#042028")
- '(background-mode dark)
- '(cursor-color "#708183")
- '(custom-safe-themes (quote ("fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" "1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" default)))
- '(foreground-color "#708183"))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
