@@ -1,0 +1,29 @@
+;; -*- mode: emacs-lisp; coding: emacs-mule; -*-
+;; --------------------------------------------------------------------------
+;; Desktop File for Emacs
+;; --------------------------------------------------------------------------
+;; Created Sat Feb  2 20:30:18 2013
+;; Desktop file format version 206
+;; Emacs version 24.2.1
+
+;; Global section:
+(setq desktop-missing-file-warning nil)
+(setq tags-file-name nil)
+(setq tags-table-list nil)
+(setq search-ring nil)
+(setq regexp-search-ring nil)
+(setq register-alist nil)
+(setq file-name-history '("~/.emacs.d/desktop-save-mode/" "/Users/yfu/.emacs" "~/.emacs" "~/perl/ex7-1.pl" "~/perl/ex6-2.pl" "~/perl/ex6-1.pl" "~/Dropbox/org/GTD.org" "~/perl/ex5-6.pl" "~/perl/ex5-1.pl" "~/Dropbox/Courses/Rotation2/bin/binding_distribution_new.m" "~/Challenge/results/2013-01-31/1/result/chrom1.test" "~/Challenge/results/2013-01-31/100/result/chrom1.test" "~/Challenge/doc/notes.org" "~/Challenge/doc/notes.org~" "~/Challenge/bin/cal_bed_len.pl" "~/Challenge/bin/get_coverage.pl" "~/Challenge/results/2013-01-31/exome_space/coverage_sites1.bed" "~/Challenge/results/2013-01-31/exome_space/sites500" "~/Challenge/results/2013-01-31/exome_space/sites100" "~/Challenge/results/2013-01-31/exome_space/sites50" "~/Challenge/results/2013-01-31/exome_space/sites30" "~/Challenge/results/2013-01-31/exome_space/sites10"))
+
+;; Buffer section -- buffers listed in same order as in buffer list:
+(desktop-create-buffer 206
+  "/Users/yfu/.emacs"
+  ".emacs"
+  'emacs-lisp-mode
+  '(yas-minor-mode auto-complete-mode)
+  6991
+  '(1 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
