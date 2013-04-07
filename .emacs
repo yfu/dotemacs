@@ -129,7 +129,7 @@ auto-mode-alist (append (list '("\\.R$" . R-mode)
 (ac-set-trigger-key "TAB")
 
 ;; For flyspell mode
-(autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
+; (autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
 
 ;; Org-mode
 (setq load-path (cons "~/.emacs.d/org/lisp" load-path))
@@ -288,4 +288,11 @@ auto-mode-alist (append (list '("\\.R$" . R-mode)
 ; (require 'autopair)
 ; (autopair-global-mode)
 
+;; ;; Pymacs
+;; (autoload 'pymacs-apply "pymacs")
+;; (autoload 'pymacs-call "pymacs")
 
+;; Python mode
+(setq py-install-directory "~/.emacs.d/python-mode.el-6.1.1")
+(add-to-list 'load-path py-install-directory)
+(require 'python-mode)
