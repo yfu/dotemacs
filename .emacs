@@ -23,7 +23,8 @@
 (setenv "PATH" "/Users/yfu/perl5/perlbrew/bin:/Users/yfu/perl5/perlbrew/perls/perl-5.16.2/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/usr/local/git/bin:/usr/texbin:/Users/yfu/Dropbox/Courses/Rotation/bin:/Users/yfu/.rvm/bin")
 ;; Emacs uses its own exec-path for binaries instead of the above path
 (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
-(setq exec-path (append exec-path '("/usr/local/bin")))
+(add-to-list 'exec-path "/usr/local/bin")
+;; (setq exec-path (append exec-path '("/usr/local/bin")))
 (setq exec-path (append exec-path '("/usr/texbin")))
 (add-to-list 'exec-path "/usr/local/mysql/bin")
 
@@ -50,11 +51,12 @@
 (setq auto-mode-alist
       (cons '("\\.text" . markdown-mode) auto-mode-alist))
 
-;yasnippet
-(add-to-list 'load-path "~/.emacs.d/plugins/yasnippet")
-(require 'yasnippet) ;; not yasnippet-bundle
-(yas-global-mode 1)
-(put 'narrow-to-region 'disabled nil)
+;yasnippet ;; I don't need this block because emacs-for-python take care
+;of this
+;(add-to-list 'load-path "~/.emacs.d/plugins/yasnippet")
+;(require 'yasnippet) ;; not yasnippet-bundle
+;(yas-global-mode 1)
+;(put 'narrow-to-region 'disabled nil)
 
 ;;R
 (add-to-list 'load-path "~/.emacs.d/ess/lisp")
@@ -122,11 +124,11 @@ auto-mode-alist (append (list '("\\.R$" . R-mode)
 	       '("melpa" . "http://melpa.milkbox.net/packages/")
 	       'APPEND))
 
-;; Auto Complete mode
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-(ac-config-default)
-(ac-set-trigger-key "TAB")
+;; Auto Complete mode: No need as emacs-for-python takes care of this
+;; (require 'auto-complete-config)
+;; (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+;; (ac-config-default)
+;; (ac-set-trigger-key "TAB")
 
 ;; For flyspell mode
 ; (autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
@@ -288,11 +290,32 @@ auto-mode-alist (append (list '("\\.R$" . R-mode)
 ; (require 'autopair)
 ; (autopair-global-mode)
 
+;; ;; Python mode
+;; (setq py-install-directory "~/.emacs.d/python-mode.el-6.1.1")
+;; (add-to-list 'load-path py-install-directory)
+;; ;(require 'python-mode) ;; To avoid the conflict between this and pymacs
+
 ;; ;; Pymacs
+;; (add-to-list 'load-path "~/.emacs.d/Pymacs")
+
 ;; (autoload 'pymacs-apply "pymacs")
 ;; (autoload 'pymacs-call "pymacs")
+;; (autoload 'pymacs-eval "pymacs" nil t)
+;; (autoload 'pymacs-exec "pymacs" nil t)
+;; (autoload 'pymacs-load "pymacs" nil t)
+;; (autoload 'pymacs-autoload "pymacs")
+;; ;;(eval-after-load "pymacs"
+;; ;;  '(add-to-list 'pymacs-load-path YOUR-PYMACS-DIRECTORY"))
 
-;; Python mode
-(setq py-install-directory "~/.emacs.d/python-mode.el-6.1.1")
-(add-to-list 'load-path py-install-directory)
-(require 'python-mode)
+;; ;; Ropemacs
+;; (require 'pymacs)
+;; (pymacs-load "ropemacs" "rope-")
+
+;; ;; Autocomplete rope integration
+;; (ac-ropemacs-initialize)
+;; (add-hook 'python-mode-hook
+;;       (lambda ()
+;;     (add-to-list 'ac-sources 'ac-source-ropemacs)))
+
+;; Emacs for python
+(load-file "~/.emacs.d/emacs-for-python/epy-init.el")
