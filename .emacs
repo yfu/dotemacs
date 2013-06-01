@@ -1,3 +1,15 @@
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+
+(unless (require 'el-get nil 'noerror)
+  (with-current-buffer
+      (url-retrieve-synchronously
+       "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
+    (let (el-get-master-branch)
+      (goto-char (point-max))
+      (eval-print-last-sexp))))
+
+(el-get 'sync)
+
 ;; Don't break hardlink when editing files
 (setq backup-by-copying-when-linked t)
 
@@ -6,12 +18,15 @@
     (tool-bar-mode -1)
   (menu-bar-mode -1)
 )
-
+(if window-system
+    (scroll-bar-mode -1)
+)
 ;;Key binding
 (setq mac-command-modifier 'super) ; Sets the Option key as Meta
 (setq mac-option-modifier 'meta) ; Set the Command key as Super
 ;; (global-set-key "\M-;" 'comment-or-uncomment-region-or-line)
 (global-set-key (kbd "s-;") 'comment-or-uncomment-region-or-line)
+(global-set-key (kbd "s-/") 'comment-or-uncomment-region-or-line)
 ;;Auto completion using hippe-expand
 (global-set-key "\M-TAB" 'hippie-expand)
 
@@ -20,13 +35,14 @@
 
 ;; Set the PATH variable for emacs because emacs inherits this value
 ;; from its parent process, maybe "launchd" process.
-(setenv "PATH" "/Users/yfu/perl5/perlbrew/bin:/Users/yfu/perl5/perlbrew/perls/perl-5.16.2/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/usr/local/git/bin:/usr/texbin:/Users/yfu/Dropbox/Courses/Rotation/bin:/Users/yfu/.rvm/bin")
+(setenv "PATH" "/usr/local/share/python:/Users/yfu/perl5/perlbrew/bin:/Users/yfu/perl5/perlbrew/perls/perl-5.16.2/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/usr/local/git/bin:/usr/texbin:/Users/yfu/Dropbox/Courses/Rotation/bin:/Users/yfu/.rvm/bin")
 ;; Emacs uses its own exec-path for binaries instead of the above path
 (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
 (add-to-list 'exec-path "/usr/local/bin")
 ;; (setq exec-path (append exec-path '("/usr/local/bin")))
 (setq exec-path (append exec-path '("/usr/texbin")))
 (add-to-list 'exec-path "/usr/local/mysql/bin")
+(add-to-list 'exec-path "/usr/local/share/python")
 
 
 ;; =============== add load path ====================>
@@ -51,11 +67,10 @@
 (setq auto-mode-alist
       (cons '("\\.text" . markdown-mode) auto-mode-alist))
 
-;yasnippet ;; I don't need this block because emacs-for-python take care
-;of this
-;(add-to-list 'load-path "~/.emacs.d/plugins/yasnippet")
-;(require 'yasnippet) ;; not yasnippet-bundle
-;(yas-global-mode 1)
+;yasnippet 
+(add-to-list 'load-path "~/.emacs.d/yasnippet")
+(require 'yasnippet) ;; not yasnippet-bundle
+(yas-global-mode 1)
 ;(put 'narrow-to-region 'disabled nil)
 
 ;;R
@@ -141,7 +156,7 @@ auto-mode-alist (append (list '("\\.R$" . R-mode)
 ;; Set the name of the file where new notes will be stored
 (setq org-mobile-inbox-for-pull "~/Dropbox/org/GTD.org")
 ;; Set to <your Dropbox root directory>/MobileOrg
-(setq org-mobile-directory "~/Dropbox/mobileOrg/")
+(setq org-mobile-directory "~/Dropbox/org/MobileOrg/")
 ;; Set up capture
 (setq org-default-notes-file (concat org-directory "GTD.org"))
 (define-key global-map "\C-cc" 'org-capture)
@@ -228,27 +243,6 @@ auto-mode-alist (append (list '("\\.R$" . R-mode)
 ;; Desktop-save-mode: like the "Recover" introduced in Lion
 ;;(desktop-save-mode t);
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(background-color "#042028")
- '(background-mode dark)
- '(cursor-color "#708183")
- '(custom-safe-themes (quote ("1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
- '(foreground-color "#708183")
- '(fringe-mode nil nil (fringe))
- '(global-ede-mode nil)
- '(send-mail-function (quote smtpmail-send-it))
- '(tool-bar-mode nil)
- '(tooltip-mode nil))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 
 ;; AUCTeX
 ;;(load "auctex.el" nil t t) ;No need as the package-install cares about this
@@ -286,36 +280,86 @@ auto-mode-alist (append (list '("\\.R$" . R-mode)
 
 (define-key global-map "\C-cl" 'org-store-link)
 (define-key global-map "\C-ca" 'org-agenda)
-(scroll-bar-mode -1)
+
 ; (require 'autopair)
 ; (autopair-global-mode)
 
-;; ;; Python mode
-;; (setq py-install-directory "~/.emacs.d/python-mode.el-6.1.1")
-;; (add-to-list 'load-path py-install-directory)
-;; ;(require 'python-mode) ;; To avoid the conflict between this and pymacs
 
-;; ;; Pymacs
-;; (add-to-list 'load-path "~/.emacs.d/Pymacs")
 
+;; Auto-complete
+(add-to-list 'load-path "~/.emacs.d/auto-complete-1.3.1")
+(require 'auto-complete)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+(require 'auto-complete-config)
+(ac-config-default)
+(global-auto-complete-mode t)
+(ac-set-trigger-key "TAB")
+
+;; Python-mode
+(setq py-install-directory "~/.emacs.d/python-mode-6.1.1/")
+(add-to-list 'load-path py-install-directory)
+(require 'python-mode)
+
+;; Pymacs
 ;; (autoload 'pymacs-apply "pymacs")
 ;; (autoload 'pymacs-call "pymacs")
 ;; (autoload 'pymacs-eval "pymacs" nil t)
 ;; (autoload 'pymacs-exec "pymacs" nil t)
 ;; (autoload 'pymacs-load "pymacs" nil t)
 ;; (autoload 'pymacs-autoload "pymacs")
-;; ;;(eval-after-load "pymacs"
-;; ;;  '(add-to-list 'pymacs-load-path YOUR-PYMACS-DIRECTORY"))
-
-;; ;; Ropemacs
+;; ; ropemacs
 ;; (require 'pymacs)
 ;; (pymacs-load "ropemacs" "rope-")
 
-;; ;; Autocomplete rope integration
-;; (ac-ropemacs-initialize)
-;; (add-hook 'python-mode-hook
-;;       (lambda ()
-;;     (add-to-list 'ac-sources 'ac-source-ropemacs)))
+;; Enable code auto-completion
+; (setq py-load-pymacs-p t)
+(require 'auto-complete-config)
+(ac-config-default)
 
-;; Emacs for python
-(load-file "~/.emacs.d/emacs-for-python/epy-init.el")
+;; ; use IPython
+;; (setq-default py-shell-name "ipython")
+;; (setq-default py-which-bufname "IPython")
+;; ;; use the wx backend, for both mayavi and matplotlib
+;; (setq py-python-command-args
+;;       '("--gui=wx" "--pylab=wx" "-colors" "Linux"))
+;; (setq py-force-py-shell-name-p t)
+
+;; Auto-completion for Python. Jedi is already installed by el-get
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:setup-keys t)
+
+;; Set max-lisp-eval-depth to a higher value
+; (setq max-lisp-eval-depth 10000)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(background-color "#042028")
+ '(background-mode dark)
+ '(cursor-color "#708183")
+ '(custom-safe-themes (quote ("1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
+ '(foreground-color "#708183"))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+(setq delete-selection-mode t)
+
+;; For Octave Mode
+(autoload 'octave-mode "octave-mod" nil t)
+
+(setq auto-mode-alist
+      (cons '("\\.m$" . octave-mode) auto-mode-alist))
+
+
+
+(add-hook 'octave-mode-hook
+	  (lambda ()
+	    (abbrev-mode 1)
+	    (auto-fill-mode 1)
+	    (if (eq window-system 'x)
+		(font-lock-mode 1))))
